@@ -28,7 +28,7 @@
         new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: 'hi ' + user.displayName 
+          content: 'You are here'
         });
         map.setCenter(pos);
 
@@ -73,8 +73,7 @@
 
     var marker = new google.maps.Marker({
       position: location,
-      title:"Found User!",
-      content: "Found you!"
+      title:"Found User!"
     });
 
     /*To add the marker to the map, call setMap();*/
