@@ -39,7 +39,7 @@ var sessionData = session({
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "/auth/facebook/callback"
+    callbackURL: "http://localhost:3000/auth/facebook/callback"
   },
   
   function(accessToken, refreshToken, profile, done) {
