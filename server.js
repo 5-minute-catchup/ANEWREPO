@@ -24,38 +24,38 @@ var User = mongoose.model('User', {
 });
 //database logic
 
-writeToDB = function(toWrtie){
-    var allUsers = db.get('fmcuser');
+// writeToDB = function(toWrtie){
+//     var allUsers = db.get('fmcuser');
 
-    for (var i = 0; i < toWrtie.length; i++) {
-      var user = toWrtie[i]
-      if(user._id === undefined){
-        allUsers.insert(task)
-      } else {
-        allUsers.findAndModify( 
-                                {
-                                  query:user._id, 
-                                  update:
-                                        {
-                                          value: user.value,
-                                          edit: user.edit,
-                                          editBtn: user.editBtn,
-                                          isDone: user.isDone,
-                                          isShown: user.isShown
-                                        },
-                                  upsert: true
-                                }
-                              )
-      }
-    } 
-  };
+//     for (var i = 0; i < toWrtie.length; i++) {
+//       var user = toWrtie[i]
+//       if(user._id === undefined){
+//         allUsers.insert(task)
+//       } else {
+//         allUsers.findAndModify( 
+//                                 {
+//                                   query:user._id, 
+//                                   update:
+//                                         {
+//                                           value: user.value,
+//                                           edit: user.edit,
+//                                           editBtn: user.editBtn,
+//                                           isDone: user.isDone,
+//                                           isShown: user.isShown
+//                                         },
+//                                   upsert: true
+//                                 }
+//                               )
+//       }
+//     } 
+//   };
 
-  readFromDB = function(f2Ex){
-   var collection = db.get('fmcuser');
-   collection.find({},{},function(e,docs){
-                    f2Ex(docs);
-                    });
-  };
+//   readFromDB = function(f2Ex){
+//    var collection = db.get('fmcuser');
+//    collection.find({},{},function(e,docs){
+//                     f2Ex(docs);
+//                     });
+//   };
 
 /*add the instance of io here*/
 
@@ -66,10 +66,10 @@ passport.use(passportStrategy.facebook);
 
 passport.serializeUser(function(user, done) {
  console.log('serializeUser: ' + user._id)
- done(null, user._id);
+ done(null, user.id);
 });
 
-passport.deserializeUser(function(obj, done) {
+passport.deserializeUser(function(id, done) {
 User.findById(id, function(err, user){
      console.log(user)
      if(!err) done(null, user);
