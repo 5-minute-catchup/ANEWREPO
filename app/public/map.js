@@ -2,7 +2,7 @@
   "use strict";
   var map;
   var markers = [];
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect('http://fivemincatchup.herokuapp.com');
 
   console.log('jories');
 
@@ -79,7 +79,6 @@
     /*To add the marker to the map, call setMap();*/
     marker.setMap(map);
   }
-
 
   function handleNoGeolocation(errorFlag) {
     var content = 'Found user';
