@@ -11,7 +11,47 @@ var methodOverride = require('method-override');
 var port = process.env.PORT || 3000
 var markers = [];
 var passportStrategy = require('./utils/passport-strategy');
-var MongoClient = require('mongodb').MongoClient;
+
+// database set up
+var mongojs = require("mongojs");
+var mongoose = require('mongoose')
+var uri = 'mongodb://FMCTeam:FMC4321@ds031802.mongolab.com:31802/fmcuser'
+var db = mongoose.connect(uri)
+
+//database logic
+
+writeToDB = function(toWrtie){
+    var allUsers = db.get('fmcuser');
+
+    for (var i = 0; i < toWrtie.length; i++) {
+      var user = toWrtie[i]
+      if(user._id === undefined){
+        allUsers.insert(task)
+      } else {
+        allUsers.findAndModify( 
+                                {
+                                  query:user._id, 
+                                  update:
+                                        {
+                                          value: user.value,
+                                          edit: user.edit,
+                                          editBtn: user.editBtn,
+                                          isDone: user.isDone,
+                                          isShown: user.isShown
+                                        },
+                                  upsert: true
+                                }
+                              )
+      }
+    } 
+  };
+
+  readFromDB = function(f2Ex){
+   var collection = db.get('fmcuser');
+   collection.find({},{},function(e,docs){
+                    f2Ex(docs);
+                    });
+  };
 
 /*add the instance of io here*/
 
@@ -39,7 +79,7 @@ var sessionData = session({
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "https://fivemincatchup.herokuapp.com/"
+    callbackURL: "/auth/facebook/callback"
   },
   function(accessToken, refreshToken, profile, done) {
 
