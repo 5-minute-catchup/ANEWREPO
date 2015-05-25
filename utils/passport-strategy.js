@@ -22,7 +22,6 @@ strategy.facebook = new FacebookStrategy({
   });
 });
 
-
 // IMPORTANT NOTE: you need to edit this code, is not going to work how it is.
 
 

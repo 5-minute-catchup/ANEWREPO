@@ -15,9 +15,8 @@ var MongoClient = require('mongodb').MongoClient;
 
 /*add the instance of io here*/
 
-
-var FACEBOOK_APP_ID = "";
-var FACEBOOK_APP_SECRET = "";
+var FACEBOOK_APP_ID = "653014024831372";
+var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 
 passport.use(passportStrategy.facebook);
 
@@ -40,12 +39,11 @@ var sessionData = session({
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
+    callbackURL: "/auth/facebook/callback"
   },
+
   function(accessToken, refreshToken, profile, done) {
-
     process.nextTick(function () {
-
       return done(null, profile);
     });
   }
