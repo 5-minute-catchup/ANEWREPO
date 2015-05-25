@@ -41,6 +41,7 @@ passport.use(new FacebookStrategy({
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: "/auth/facebook/callback"
   },
+  
   function(accessToken, refreshToken, profile, done) {
 
     process.nextTick(function () {
