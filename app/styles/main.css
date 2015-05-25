@@ -1,13 +1,21 @@
-body {
-  padding: 0;
-  height: 100%;
-  margin: 0;
+
+.h2 {
+  color: #ffffff;
+  padding: 10px;
 }
 
-html {
-  height: 100%;
-  padding: 0;
+#wrap {
+  width: 50%;
+  text-align: center;
+  margin: 0 auto;
+  background-color:  #D2E1E8;
+  border-radius: 10px;
+  padding: 20px;
 }
+
+.navbar-brand {
+  font-family: 'Pacifico', cursive;
+  }
 
 #map-canvas { 
   height: 90%; 
