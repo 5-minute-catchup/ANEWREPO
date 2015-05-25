@@ -1,3 +1,6 @@
+.navbar-custom {
+  background-color: #E58C17;
+}
 
 .h2 {
   color: #ffffff;
@@ -15,6 +18,7 @@
 
 .navbar-brand {
   font-family: 'Pacifico', cursive;
+  color: #ffffff;
   }
 
 #map-canvas { 
@@ -58,6 +62,7 @@
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
+  background-color: #E58C17;
 }
 
 .container-narrow > hr {
