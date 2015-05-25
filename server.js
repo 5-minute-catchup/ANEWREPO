@@ -18,6 +18,10 @@ var mongoose = require('mongoose')
 var uri = 'mongodb://FMCTeam:FMC4321@ds031802.mongolab.com:31802/fmcuser'
 var db = mongoose.connect(uri)
 
+var User = mongoose.model('User', {
+  oauthID: Number,
+  name: String
+});
 //database logic
 
 writeToDB = function(toWrtie){
@@ -61,11 +65,16 @@ var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 passport.use(passportStrategy.facebook);
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+ console.log('serializeUser: ' + user._id)
+ done(null, user._id);
 });
 
 passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+User.findById(id, function(err, user){
+     console.log(user)
+     if(!err) done(null, user);
+     else done(err, null)
+ })
 });
 
 var sessionData = session({
@@ -122,7 +131,13 @@ app.get('/', function(req, res){
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
+    User.findById(req.session.passport.user, function(err, user) {
+   if(err) {
+     console.log(err);
+   } else {
+     res.render('account', { user: user});
+   }
+  });
 });
 
 app.get('/login', function(req, res){
