@@ -1,0 +1,19 @@
+{
+  "name": "geo-socket",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Stacca/geo-socket",
+  "authors": [
+    "Ed O'Brien <edmund.obrien.2010@live.rhul.ac.uk>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.4"
+  }
+}
