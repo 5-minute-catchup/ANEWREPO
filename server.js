@@ -10,7 +10,6 @@ var cookieParser = require("cookie-parser")
 var methodOverride = require('method-override');
 var port = process.env.PORT || 3000
 var markers = [];
-var passportStrategy = require('./utils/passport-strategy');
 
 // database set up
 var mongojs = require("mongojs");
@@ -24,38 +23,6 @@ var User = mongoose.model('User', {
 });
 //database logic
 
-// writeToDB = function(toWrtie){
-//     var allUsers = db.get('fmcuser');
-
-//     for (var i = 0; i < toWrtie.length; i++) {
-//       var user = toWrtie[i]
-//       if(user._id === undefined){
-//         allUsers.insert(task)
-//       } else {
-//         allUsers.findAndModify( 
-//                                 {
-//                                   query:user._id, 
-//                                   update:
-//                                         {
-//                                           value: user.value,
-//                                           edit: user.edit,
-//                                           editBtn: user.editBtn,
-//                                           isDone: user.isDone,
-//                                           isShown: user.isShown
-//                                         },
-//                                   upsert: true
-//                                 }
-//                               )
-//       }
-//     } 
-//   };
-
-//   readFromDB = function(f2Ex){
-//    var collection = db.get('fmcuser');
-//    collection.find({},{},function(e,docs){
-//                     f2Ex(docs);
-//                     });
-//   };
 
 /*add the instance of io here*/
 
@@ -93,10 +60,9 @@ passport.use(new FacebookStrategy({
     enableProof: false
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log("bottom" + profile)
     console.log(profile.id)
      User.findOne({
-            'facebook.id': profile.id 
+            facebookID: profile.id 
         }, function(err, user) {
             if(err) {
               return done(err);
@@ -106,6 +72,7 @@ passport.use(new FacebookStrategy({
                   facebookID: profile.id,
                     name: profile.displayName,
                     provider: 'facebook',
+
                 });
                 user.save(function(err) {
                     if (err) console.log(err);
