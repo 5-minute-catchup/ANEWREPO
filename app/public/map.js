@@ -71,9 +71,10 @@
       center: location
     };
 
-    var marker = new google.maps.Marker({
+    var marker = new google.maps.InfoWindow({
       position: location,
-      title:"Found User!"
+      title:"Found User!",
+      content: "Username"
     });
 
     /*To add the marker to the map, call setMap();*/

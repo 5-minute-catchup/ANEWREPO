@@ -1,18 +1,39 @@
+/*this is the marker*/
+.gm-style-iw {
+   background-color: #fff;
+   border-radius: 2px 2px 0 0;
+}
+
 body {
-    background-image: url("../public/images/background.jpeg");
-    background-repeat:no-repeat;
-    background-size:100%;
-    background-position:center;
+  background: url("../public/images/street.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .navbar-custom {
-  color: white;
-  opacity: 70%;
+ background: rgba(255, 255, 255, 0.6);
+ border-radius: 0px;
 }
 
-.h2 {
+.footer {
+  text-align: center;
+  color: #ffffff;
+}
+
+h1 {
+  padding: 7px;
+  font-size: 37px;
+  font-family: 'Pacifico', cursive;
+  color: #ffffff;
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.61);
+}
+
+h4 {
   color: #ffffff;
   padding: 10px;
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.61);
 }
 
 #wrap {
@@ -27,6 +48,7 @@ body {
 .navbar-brand {
   font-family: 'Pacifico', cursive;
   color: #c71585;
+  font-size: 23px;
   }
 
 .a:link {
