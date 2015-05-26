@@ -10,22 +10,38 @@ var cookieParser = require("cookie-parser")
 var methodOverride = require('method-override');
 var port = process.env.PORT || 3000
 var markers = [];
-var passportStrategy = require('./utils/passport-strategy');
-var MongoClient = require('mongodb').MongoClient;
+
+// database set up
+var mongojs = require("mongojs");
+var mongoose = require('mongoose')
+var uri = 'mongodb://fmcteam:fmc123@ds031802.mongolab.com:31802/fmcuser'
+var db = mongoose.connect(uri)
+
+var User = mongoose.model('User', {
+  name: String,
+  facebookID: String
+});
+//database logic
+
 
 /*add the instance of io here*/
 
 var FACEBOOK_APP_ID = "653014024831372";
 var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 
-passport.use(passportStrategy.facebook);
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+ console.log('serializeUser: ' + user.id)
+  done(null, user.id);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(id, done) {
+  User.findOne({
+    _id: id
+    }, function(err, user){
+     if(!err) done(null, User);
+     else done(err, null)
+ })
 });
 
 var sessionData = session({
@@ -39,13 +55,35 @@ var sessionData = session({
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "/auth/facebook/callback"
+    callbackURL: "/auth/facebook/callback",
+    profileFields: ['id', 'displayName'],
+    enableProof: false
   },
-
   function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-      return done(null, profile);
-    });
+    console.log(profile.id)
+     User.findOne({
+            facebookID: profile.id 
+        }, function(err, user) {
+            if(err) {
+              return done(err);
+            }
+            else if (!user) {
+                user = new User({
+                  facebookID: profile.id,
+                    name: profile.displayName,
+                    provider: 'facebook',
+
+                });
+                user.save(function(err) {
+                    if (err) console.log(err);
+                    return done(err, user);
+                });
+            } else {
+              console.log("in else block")
+                //found user. Return
+                return done(err, user);
+            }
+        });
   }
 ));
 
@@ -77,11 +115,19 @@ var app = express();
 
 
 app.get('/', function(req, res){
-  res.render('index', { user: req.user });
+  User.findById(req.session.passport.user, function(err, user) {
+  res.render('index', { user: user });
+});
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
+    User.findById(req.session.passport.user, function(err, user) {
+   if(err) {
+     console.log(err);
+   } else {
+     res.render('account', { user: user});
+   }
+  });
 });
 
 app.get('/login', function(req, res){
@@ -89,9 +135,7 @@ app.get('/login', function(req, res){
 });
 
 app.get('/auth/facebook',
-  passport.authenticate('facebook'),
-  function(req, res){
-  });
+  passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
@@ -138,44 +182,5 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login')
 }
-
-// Session stuff
-
-var passport = require('passport');
-var passportStrategy = require('./utils/passport-strategy');
-var expressSession = require('express-session');
-var sessionStore = require('sessionstore');
-
-
-
-app.use(sessionData);
-
-  // Here's the trick, you attach your current session data to the socket using the client cookie as a convergence point.
-io.use(function(socket, next){
-  sessionData(socket.request, socket.request.res, next);
-});
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.use(passportStrategy.facebook);
-
-
-// This part is quite tricky, 
-
-// This part is important, this is the function to get the id of the user in the databse based on the user object.
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-
-// Here we get the user object based on the user id on the database.
-
-passport.deserializeUser(function(user, done) {
-  // this is an example because im using mongo in my original proyect, you need to replace this with something working on postgre to get the user from his ID and pass the complete user object to the "done" function.
-  Users.findById(user, function(err, User) {
-    done(err, User);
-  });
-});
 
 module.exports = server;
