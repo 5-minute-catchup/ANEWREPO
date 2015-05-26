@@ -139,4 +139,43 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login')
 }
 
+// Session stuff
+
+var passport = require('passport');
+var passportStrategy = require('./utils/passport-strategy');
+var expressSession = require('express-session');
+var sessionStore = require('sessionstore');
+
+
+
+app.use(sessionData);
+
+  // Here's the trick, you attach your current session data to the socket using the client cookie as a convergence point.
+io.use(function(socket, next){
+  sessionData(socket.request, socket.request.res, next);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(passportStrategy.facebook);
+
+
+// This part is quite tricky, 
+
+// This part is important, this is the function to get the id of the user in the databse based on the user object.
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+
+// Here we get the user object based on the user id on the database.
+
+passport.deserializeUser(function(user, done) {
+  // this is an example because im using mongo in my original proyect, you need to replace this with something working on postgre to get the user from his ID and pass the complete user object to the "done" function.
+  Users.findById(user, function(err, User) {
+    done(err, User);
+  });
+});
+
 module.exports = server;

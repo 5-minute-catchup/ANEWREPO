@@ -4,7 +4,7 @@
   var markers = [];
   var socket = io.connect('http://fivemincatchup.herokuapp.com');
 
-  console.log('jories');
+  console.log('test');
 
   function initialize() {
     var mapOptions = {

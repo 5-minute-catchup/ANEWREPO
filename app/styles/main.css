@@ -1,13 +1,30 @@
 body {
-  padding: 0;
-  height: 100%;
-  margin: 0;
+    background-image: url("paper.gif");
+    background-color: #cccccc;
 }
 
-html {
-  height: 100%;
-  padding: 0;
+.navbar-custom {
+  background-color: #E58C17;
 }
+
+.h2 {
+  color: #ffffff;
+  padding: 10px;
+}
+
+#wrap {
+  width: 50%;
+  text-align: center;
+  margin: 0 auto;
+  background-color:  #D2E1E8;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.navbar-brand {
+  font-family: 'Pacifico', cursive;
+  color: #ffffff;
+  }
 
 #map-canvas { 
   height: 90%; 
@@ -50,6 +67,7 @@ html {
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
+  background-color: #E58C17;
 }
 
 .container-narrow > hr {
