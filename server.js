@@ -60,7 +60,7 @@ passport.use(new FacebookStrategy({
     enableProof: false
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log(profile.id)
+    console.log(profile)
      User.findOne({
             facebookID: profile.id 
         }, function(err, user) {
@@ -83,7 +83,10 @@ passport.use(new FacebookStrategy({
                 //found user. Return
                 return done(err, user);
             }
+            
         });
+
+
   }
 ));
 
