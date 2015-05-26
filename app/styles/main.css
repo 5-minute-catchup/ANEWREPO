@@ -4,6 +4,10 @@
    border-radius: 2px 2px 0 0;
 }
 
+.header {padding-bottom:0px;
+  margin:0px;
+  border:  0;}
+
 body {
   background: url("../public/images/street.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -15,6 +19,9 @@ body {
 .navbar-custom {
  background: rgba(255, 255, 255, 0.6);
  border-radius: 0px;
+ position: relative;
+ z-index: 200;
+ padding: 0px;
 }
 
 .footer {
@@ -28,6 +35,14 @@ h1 {
   font-family: 'Pacifico', cursive;
   color: #ffffff;
   text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.61);
+}
+
+h2 {
+  padding: 7px;
+  font-size: 37px;
+  font-family: 'Pacifico', cursive;
+  color: #c71585
+  z-index: 100;
 }
 
 h4 {
@@ -55,12 +70,19 @@ h4 {
   color: #c71585;
 }
 
-#map-canvas { 
-  height: 90%; 
+#float {
+  position: absolute;
+  z-index: 900;
+}
+
+/*#map-canvas { 
+  height: 100%; 
   margin: 0; 
   padding: 0;
-  z-index: 6;
-}
+  z-index: 1;
+  position: fixed;
+  top: 0px;
+}*/
 
 .browsehappy {
   margin: 0.2em 0;
@@ -74,27 +96,28 @@ h4 {
 .header,
 .marketing,
 .footer {
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 0px;
+  padding-right: 0px;
+  z-index: 200;
 }
 
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
-  margin-bottom: 10px;
+  border-bottom: 0px solid #e5e5e5;
+  margin-bottom: 0px;
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
   margin-top: 0;
   margin-bottom: 0;
   line-height: 40px;
-  padding-bottom: 19px;
+  padding-bottom: 0px;
 }
 
 /* Custom page footer */
 
 .container-narrow > hr {
-  margin: 30px 0;
+  margin: 0px 0;
 }
 
 /* Main marketing message and sign up button */
@@ -130,7 +153,8 @@ h4 {
   }
   /* Space out the masthead */
   .header {
-    margin-bottom: 30px;
+    margin-bottom: 0px;
+    border-bottom: 0px;
   }
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {

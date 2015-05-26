@@ -32,6 +32,7 @@
         });
         map.setCenter(pos);
 
+
         /*emit the marker*/
         socket.emit('marker', {
           lat: position.coords.latitude,
@@ -79,6 +80,7 @@
 
     /*To add the marker to the map, call setMap();*/
     marker.setMap(map);
+
   }
 
   function handleNoGeolocation(errorFlag) {
