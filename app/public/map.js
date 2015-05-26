@@ -2,7 +2,7 @@
   "use strict";
   var map;
   var markers = [];
-  var socket = io.connect('http://fivemincatchup.herokuapp.com');
+  var socket = io.connect('http://localhost:3000');
 
   console.log('test');
 
@@ -71,9 +71,12 @@
       center: location
     };
 
-    var marker = new google.maps.Marker({
+    
+
+    var marker = new google.maps.InfoWindow({ //adds an info window to the second marker
       position: location,
-      title:"Found User!"
+      title:"Found User!",
+      content: contentString
     });
 
     /*To add the marker to the map, call setMap();*/

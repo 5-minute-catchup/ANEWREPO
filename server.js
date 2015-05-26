@@ -10,15 +10,31 @@ var cookieParser = require("cookie-parser")
 var methodOverride = require('method-override');
 var port = process.env.PORT || 3000
 var markers = [];
-var passportStrategy = require('./utils/passport-strategy');
 var MongoClient = require('mongodb').MongoClient;
+var mongoose = require('mongoose');
 
 /*add the instance of io here*/
+
+mongoose.connect('mongodb://localhost/FMC', function(err) {
+  if(err){
+    console.log(err);
+  } else{
+    console.log('Connected to MongoDB');
+  }
+});
+
+var userSchema = mongoose.Schema({
+  id: Number,
+  name: { first: String, last: String },
+  picture: { url: String },
+  created: { type: Date, default: Date.now }
+});
+
+var User = mongoose.model('User', userSchema);
 
 var FACEBOOK_APP_ID = "653014024831372";
 var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 
-passport.use(passportStrategy.facebook);
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -41,6 +57,15 @@ passport.use(new FacebookStrategy({
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: "/auth/facebook/callback"
   },
+    
+    var newUser = new User({
+      id: Number,
+      name: { first: String, last: String },
+      picture: { url: String }
+    });
+    newUser.save(function(err) {
+      if(err) throw err;
+    });
 
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
@@ -48,6 +73,7 @@ passport.use(new FacebookStrategy({
     });
   }
 ));
+
 
 var app = express();
 
@@ -108,7 +134,6 @@ app.get('/logout', function(req, res){
 //   res.sendFile(__dirname + '/app/public/map.js');
 // });
 
-
 // Socket markers start
 
 io.on('connection', function(socket) {
@@ -139,13 +164,13 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login')
 }
 
+
 // Session stuff
 
 // var passport = require('passport');
 // var passportStrategy = require('./utils/passport-strategy');
 // var expressSession = require('express-session');
 // var sessionStore = require('sessionstore');
-
 
 
 // app.use(sessionData);
