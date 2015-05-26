@@ -25,11 +25,20 @@
       navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-        new google.maps.InfoWindow({
+        var infowindow = new google.maps.InfoWindow({
+          content: "No User Yet",
+        });
+
+        var marker = new google.maps.Marker({
           map: map,
           position: pos,
-          content: 'You are here'
+          title: 'user'
         });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map,marker);
+        });
+
         map.setCenter(pos);
 
         /*emit the marker*/

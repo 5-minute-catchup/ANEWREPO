@@ -10,38 +10,36 @@ var cookieParser = require("cookie-parser")
 var methodOverride = require('method-override');
 var port = process.env.PORT || 3000
 var markers = [];
+// database set up
 var MongoClient = require('mongodb').MongoClient;
 var mongoose = require('mongoose');
+var mongojs = require("mongojs");
+var uri = 'mongodb://fmcteam:fmc123@ds031802.mongolab.com:31802/fmcuser'
+var db = mongoose.connect(uri)
+
+var User = mongoose.model('User', {
+  name: String,
+  facebookID: String
+});
+//database logic
 
 /*add the instance of io here*/
-
-mongoose.connect('mongodb://localhost/FMC', function(err) {
-  if(err){
-    console.log(err);
-  } else{
-    console.log('Connected to MongoDB');
-  }
-});
-
-var userSchema = mongoose.Schema({
-  id: Number,
-  name: { first: String, last: String },
-  picture: { url: String },
-  created: { type: Date, default: Date.now }
-});
-
-var User = mongoose.model('User', userSchema);
 
 var FACEBOOK_APP_ID = "653014024831372";
 var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 
-
 passport.serializeUser(function(user, done) {
-  done(null, user);
+ console.log('serializeUser: ' + user.id)
+  done(null, user.id);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(id, done) {
+  User.findOne({
+    _id: id
+    }, function(err, user){
+     if(!err) done(null, User);
+     else done(err, null)
+ })
 });
 
 var sessionData = session({
@@ -71,6 +69,35 @@ passport.use(new FacebookStrategy({
     process.nextTick(function () {
       return done(null, profile);
     });
+    callbackURL: "/auth/facebook/callback",
+    profileFields: ['id', 'displayName'],
+    enableProof: false
+  },
+  function(accessToken, refreshToken, profile, done) {
+    console.log(profile.id)
+     User.findOne({
+            facebookID: profile.id 
+        }, function(err, user) {
+            if(err) {
+              return done(err);
+            }
+            else if (!user) {
+                user = new User({
+                  facebookID: profile.id,
+                    name: profile.displayName,
+                    provider: 'facebook',
+                });
+                user.save(function(err) {
+                    if (err) console.log(err);
+                    return done(err, user);
+                });
+            } else {
+              console.log("in else block")
+                //found user. Return
+                return done(err, user);
+            }
+        });
+>>>>>>> c23750deaf3e1bdc967e4a8d1dc9a35cf7b053ea
   }
 ));
 
@@ -103,11 +130,19 @@ var app = express();
 
 
 app.get('/', function(req, res){
-  res.render('index', { user: req.user });
+  User.findById(req.session.passport.user, function(err, user) {
+  res.render('index', { user: user });
+});
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
+    User.findById(req.session.passport.user, function(err, user) {
+   if(err) {
+     console.log(err);
+   } else {
+     res.render('account', { user: user});
+   }
+  });
 });
 
 app.get('/login', function(req, res){
@@ -115,9 +150,7 @@ app.get('/login', function(req, res){
 });
 
 app.get('/auth/facebook',
-  passport.authenticate('facebook'),
-  function(req, res){
-  });
+  passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
