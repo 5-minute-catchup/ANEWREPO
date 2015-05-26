@@ -1,10 +1,13 @@
 body {
-    background-image: url("paper.gif");
-    background-color: #cccccc;
+    background-image: url("../public/images/background.jpeg");
+    background-repeat:no-repeat;
+    background-size:100%;
+    background-position:center;
 }
 
 .navbar-custom {
-  background-color: #E58C17;
+  color: white;
+  opacity: 70%;
 }
 
 .h2 {
@@ -14,17 +17,21 @@ body {
 
 #wrap {
   width: 50%;
+  height: 100%;
   text-align: center;
   margin: 0 auto;
-  background-color:  #D2E1E8;
   border-radius: 10px;
   padding: 20px;
 }
 
 .navbar-brand {
   font-family: 'Pacifico', cursive;
-  color: #ffffff;
+  color: #c71585;
   }
+
+.a:link {
+  color: #c71585;
+}
 
 #map-canvas { 
   height: 90%; 
@@ -63,12 +70,6 @@ body {
 }
 
 /* Custom page footer */
-.footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
-  background-color: #E58C17;
-}
 
 .container-narrow > hr {
   margin: 30px 0;

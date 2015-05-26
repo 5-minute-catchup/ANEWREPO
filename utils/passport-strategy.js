@@ -4,8 +4,8 @@ var strategy = {};
 
 strategy.facebook = new FacebookStrategy({
   clientID : "653014024831372",
-  clientSecret: "FACEBOOK_APP_SECRET_HERE",
-  callbackURL: "FACEBOOK_APP_CALLBACK_URL_HERE",
+  clientSecret: "8f7186268d5d2f58856d95c657266f96",
+  callbackURL: "/auth/facebook/callback",
   profileFields: ['id', 'name','picture.type(large)', 'emails', 'gender', 'profileUrl']  
 }, function(accessToken, refreshToken, profile, done){
   // THIS IS EXAMPLE CODE, YOU NEED TO ADAPT THIS INTO YOUR POSTGRE SYNTAX TO SAVE THE USER INTO THE DATABASE.
