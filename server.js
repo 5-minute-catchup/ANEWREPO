@@ -15,12 +15,12 @@ var passportStrategy = require('./utils/passport-strategy');
 // database set up
 var mongojs = require("mongojs");
 var mongoose = require('mongoose')
-var uri = 'mongodb://FMCTeam:FMC4321@ds031802.mongolab.com:31802/fmcuser'
+var uri = 'mongodb://fmcteam:fmc123@ds031802.mongolab.com:31802/fmcuser'
 var db = mongoose.connect(uri)
 
 var User = mongoose.model('User', {
-  oauthID: Number,
-  name: String
+  name: String,
+  facebookID: String
 });
 //database logic
 
@@ -62,15 +62,15 @@ var User = mongoose.model('User', {
 var FACEBOOK_APP_ID = "653014024831372";
 var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 
-passport.use(passportStrategy.facebook);
 
 passport.serializeUser(function(user, done) {
- console.log('serializeUser: ' + user._id)
- done(null, user.id);
+ console.log('serializeUser: ' + user.id)
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-User.findById(id, function(err, user){
+  console.log(id)
+  User.findById(id, function(err, user){
      console.log(user)
      if(!err) done(null, user);
      else done(err, null)
@@ -88,14 +88,33 @@ var sessionData = session({
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "/auth/facebook/callback"
+    callbackURL: "/auth/facebook/callback",
+    profileFields: ['id', 'name'],
+    enableProof: false
   },
   function(accessToken, refreshToken, profile, done) {
-
-    process.nextTick(function () {
-
-      return done(null, profile);
-    });
+    console.log("accesstoken: " + accessToken + "refreshToken " + refreshToken + "profile: " + profile.id + "done:" + done)
+     User.findOne({
+            'facebook.id': profile.id 
+        }, function(err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (!user) {
+                user = new User({
+                    name: profile.displayName,
+                    provider: 'facebook',
+                    facebook: profile._json
+                });
+                user.save(function(err) {
+                    if (err) console.log(err);
+                    return done(err, user);
+                });
+            } else {
+                //found user. Return
+                return done(err, user);
+            }
+        });
   }
 ));
 
@@ -145,9 +164,7 @@ app.get('/login', function(req, res){
 });
 
 app.get('/auth/facebook',
-  passport.authenticate('facebook'),
-  function(req, res){
-  });
+  passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
