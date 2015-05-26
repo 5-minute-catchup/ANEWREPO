@@ -69,10 +69,10 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  console.log(id)
-  User.findById(id, function(err, user){
-     console.log(user)
-     if(!err) done(null, user);
+  User.findOne({
+    _id: id
+    }, function(err, user){
+     if(!err) done(null, User);
      else done(err, null)
  })
 });
@@ -89,28 +89,30 @@ passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: "/auth/facebook/callback",
-    profileFields: ['id', 'name'],
+    profileFields: ['id', 'displayName'],
     enableProof: false
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log("accesstoken: " + accessToken + "refreshToken " + refreshToken + "profile: " + profile.id + "done:" + done)
+    console.log("bottom" + profile)
+    console.log(profile.id)
      User.findOne({
             'facebook.id': profile.id 
         }, function(err, user) {
-            if (err) {
-                return done(err);
+            if(err) {
+              return done(err);
             }
-            if (!user) {
+            else if (!user) {
                 user = new User({
+                  facebookID: profile.id,
                     name: profile.displayName,
                     provider: 'facebook',
-                    facebook: profile._json
                 });
                 user.save(function(err) {
                     if (err) console.log(err);
                     return done(err, user);
                 });
             } else {
+              console.log("in else block")
                 //found user. Return
                 return done(err, user);
             }
@@ -146,7 +148,9 @@ var app = express();
 
 
 app.get('/', function(req, res){
-  res.render('index', { user: req.user });
+  User.findById(req.session.passport.user, function(err, user) {
+  res.render('index', { user: user });
+});
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
