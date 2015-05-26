@@ -31,7 +31,12 @@
           content: 'You are here'
         });
         map.setCenter(pos);
+<<<<<<< HEAD
  
+=======
+
+
+>>>>>>> fa919a789cb7f1735023f468f1ca27734d900a05
         /*emit the marker*/
         socket.emit('marker', {
           lat: position.coords.latitude,
@@ -79,6 +84,7 @@
  
     /*To add the marker to the map, call setMap();*/
     marker.setMap(map);
+
   }
  
   function handleNoGeolocation(errorFlag) {
