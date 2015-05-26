@@ -2,7 +2,7 @@
   "use strict";
   var map;
   var markers = [];
-  var socket = io.connect('http://fivemincatchup.herokuapp.com');
+  var socket = io.connect('https://fivemincatchup.herokuapp.com');
  
   console.log('test');
  
