@@ -8,8 +8,9 @@ var sessionStore = require('sessionstore');
 var bodyParser = require("body-parser")
 var cookieParser = require("cookie-parser")
 var methodOverride = require('method-override');
-var port = process.env.PORT || 3000
+var port = process.env.PORT || 3000;
 var markers = [];
+var image = "";
 
 // database set up
 var mongojs = require("mongojs");
@@ -19,7 +20,9 @@ var db = mongoose.connect(uri)
 
 var User = mongoose.model('User', {
   name: String,
-  facebookID: String
+  facebookID: String,
+  image: String,
+  friends: String,
 });
 //database logic
 
@@ -56,11 +59,16 @@ passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: "/auth/facebook/callback",
-    profileFields: ['id', 'displayName'],
+    profileFields: ['id', 'displayName', 'user_friends'],
     enableProof: false
   },
   function(accessToken, refreshToken, profile, done) {
+
+    // var friendsSorter = for(i=0; i < profile.length; i++){
+
+    // }
     console.log(profile)
+
      User.findOne({
             facebookID: profile.id 
         }, function(err, user) {
@@ -72,20 +80,23 @@ passport.use(new FacebookStrategy({
                   facebookID: profile.id,
                     name: profile.displayName,
                     provider: 'facebook',
+                    facebook: profile._json,
+                    image: "https://graph.facebook.com/" + profile.id + "/picture?width=200&height=200&access_token=" + accessToken,
+                    friends: "https://graph.facebook.com/" + profile.id + "/friends&access_token=" + accessToken
 
                 });
                 user.save(function(err) {
                     if (err) console.log(err);
                     return done(err, user);
+                console.log(user.picture.picture.data.url)
                 });
             } else {
               console.log("in else block")
                 //found user. Return
                 return done(err, user);
             }
-            
-        });
 
+        });
 
   }
 ));
@@ -143,6 +154,7 @@ app.get('/auth/facebook',
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
+
     res.redirect('/');
   });
 
