@@ -167,6 +167,16 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+app.get('/chat', function(req, res){
+  User.findById(req.session.passport.user, function(err, user) {
+    if(err) {
+      console.log(err);
+    } else {
+     res.render('chat', { user: user});
+    }  
+  });
+});
+
 
 io.use(function(socket, next) {
   sessionObject(socket.request, socket.request.res, next);
@@ -196,9 +206,19 @@ io.on('connection', function(socket) {
 
 });
 
+io.on('chat', function(socket){
+  console.log('a user connected');
+  socket.on('chat message', function(msg){
+    console.log('message:' + msg);
+     io.emit('chat message', msg);
+  });
+});
+
 server.listen(port, function(){
   console.log('five minute catch up is on port 3000');
 });
+
+
 
 // socket markers end
 
