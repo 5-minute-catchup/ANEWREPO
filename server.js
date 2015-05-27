@@ -204,15 +204,20 @@ app.get('/chat', function(req, res){
 
 // Socket markers start
 
+
 io.on('connection', function(socket) {
     console.log('a user connected');
-
-    socket.on('marker', function(data) {
+      socket.on('marker', function(data) {
       data.socketId = socket.id;
-      markers[socket.id] = data;
-      console.log('marker latitude: ' + data.lat + ', marker longitude:' + data.lng);
-      socket.broadcast.emit('show-marker', data);
+      User.findById(socket.request.session.passport.user, function(err, user){
+      if(user){
+        data.user = user;
+        markers[socket.id] = data;
+        console.log(data);
+        io.emit('show-marker', data);
+      }
     });
+  });
 
     // socket.on('show-marker', )
     socket.on('show-user-location', function(data) {
@@ -220,6 +225,7 @@ io.on('connection', function(socket) {
     });
 
 });
+
 
 server.listen(port, function(){
   console.log('five minute catch up is on port 3000');
@@ -234,7 +240,7 @@ function ensureAuthenticated(req, res, next) {
 
 // chat sockets
 
-io.on('connection', function(socket){
+io.on('chat', function(socket){
   console.log('a user connected');
   socket.on('chat message', function(msg){
     console.log('message:' + msg);
