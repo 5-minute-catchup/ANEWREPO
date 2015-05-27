@@ -3,13 +3,19 @@
   var map;
   var markers = [];
   var socket = io.connect('https://fivemincatchup.herokuapp.com');
- 
-  console.log('test');
- 
+
+  var getUser = document.getAttribute("map-canvas");
+
+  console.log(getUser.dataset.name);
+
+
+  console.log(getUser);
+
   function initialize() {
     var mapOptions = {
       zoom: 16
     };
+
     map = new google.maps.Map(document.getElementById('map-canvas'),
         mapOptions);
  
@@ -24,14 +30,14 @@
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
- 
+
         new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: '<IMG BORDER="0" ALIGN="Left" SRC="https://graph.facebook.com/10153052143439442/picture"> <br>Phoebe '
+          // content:
         });
         map.setCenter(pos);
- 
+
         /*emit the marker*/
         socket.emit('marker', {
           lat: position.coords.latitude,

@@ -25,7 +25,6 @@ var User = mongoose.model('User', {
 });
 //database logic
 
-
 /*add the instance of io here*/
 
 var FACEBOOK_APP_ID = "653014024831372";
@@ -164,7 +163,6 @@ io.on('connection', function(socket) {
 
     socket.on('marker', function(data) {
       data.socketId = socket.id;
-      data.user = socket.request.session.passport.user;
       markers[socket.id] = data;
       console.log('marker latitude: ' + data.lat + ', marker longitude:' + data.lng);
       socket.broadcast.emit('show-marker', data);
