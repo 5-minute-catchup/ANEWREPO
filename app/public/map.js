@@ -28,7 +28,7 @@
         new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: profile.id + 'user.name <IMG BORDER="0" ALIGN="Left" SRC="https://graph.facebook.com/10153052143439442/picture"> <br>Phoebe '
+          content: 'user.name <IMG BORDER="0" ALIGN="Left" SRC="https://graph.facebook.com/10153052143439442/picture"> <br>Phoebe '
         });
         map.setCenter(pos);
  
