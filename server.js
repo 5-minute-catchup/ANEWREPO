@@ -10,7 +10,7 @@ var cookieParser = require("cookie-parser")
 var methodOverride = require('method-override');
 var port = process.env.PORT || 3000;
 var markers = [];
-var image = "";
+var https = require('https');
 
 // database set up
 var mongojs = require("mongojs");
@@ -25,6 +25,7 @@ var User = mongoose.model('User', {
   name: String,
   facebookID: String,
   image: String,
+  friends: Array,
 });
 //database logic
 
@@ -57,46 +58,70 @@ passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: "/auth/facebook/callback",
-    profileFields: ['id', 'displayName', 'user_friends'],
+    profileFields: ['id', 'displayName'],
     enableProof: false
   },
   function(accessToken, refreshToken, profile, done) {
 
-    // var friendsSorter = for(i=0; i < profile.length; i++){
 
-    // }
-    console.log(profile)
+    var friendObject;
+    console.log(friendsSorter())
 
-     User.findOne({
-            facebookID: profile.id 
-        }, function(err, user) {
-            if(err) {
-              return done(err);
-            }
-            else if (!user) {
-                user = new User({
-                  facebookID: profile.id,
-                    name: profile.displayName,
-                    provider: 'facebook',
-                    facebook: profile._json,
-                    image: "https://graph.facebook.com/" + profile.id + "/picture?width=200&height=200&access_token=" + accessToken,
-                    friends: "https://graph.facebook.com/" + profile.id + "/friends&access_token=" + accessToken
-                });
-                user.save(function(err) {
-                    if (err) console.log(err);
-                    return done(err, user);
-                console.log(user.picture.picture.data.url)
-                });
-            } else {
-              console.log("in else block")
-                //found user. Return
-                return done(err, user);
-            }
 
+    function friendsSorter(){
+
+      https.get("https://graph.facebook.com/" + profile.id + "/friends?" + "&access_token=" + accessToken, function(res) {
+        var body = '';
+        var array = []
+        res.on('data', function(bit) {
+          body += bit;
         });
+        res.on('end', function(){
+            var results = JSON.parse(body).data.map(function(friend){
+              var friends = {};
+              friends[friend.id] = friend.name; 
+              return friends;
+            })
+            updateFriends(results)
+          })
+        }).on('error', function(err) {
+          console.error(err);
+        })
+    };
+
+    function updateFriends(friends) { 
+      User.findOne({facebookID: profile.id}, function(err, user) {
+              // friendsSorter()
+              if(err) {
+                console.log("dont see me")
+                return done(err);
+              }
+              else if (!user) {
+                  user = new User({
+                    facebookID: profile.id,
+                      name: profile.displayName,
+                      provider: 'facebook',
+                      facebook: profile._json,
+                      image: "https://graph.facebook.com/" + profile.id + "/picture?width=200&height=200&access_token=" + accessToken,
+                      friends: friends
+                  });
+
+                  user.save(function(err) {
+                      if (err) console.log(err);
+                      return done(err, user);
+                  });
+              } else {
+                console.log("in else block")
+                  //found user. Return
+                  return done(err, user);
+              }
+
+          });
+    }
 
   }
 ));
+
 
 var app = express();
 
@@ -160,9 +185,7 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-// app.get('/mapjs', function(req, res){
-//   res.sendFile(__dirname + '/app/public/map.js');
-// });
+
 
 
 // Socket markers start
