@@ -11,12 +11,16 @@ var methodOverride = require('method-override');
 var port = process.env.PORT || 3000;
 var markers = [];
 var https = require('https');
+var io = require('socket.io')(http);
+
 
 // database set up
 var mongojs = require("mongojs");
 var mongoose = require('mongoose')
 var uri = 'mongodb://fmcteam:fmc123@ds031802.mongolab.com:31802/fmcuser'
 var db = mongoose.connect(uri)
+
+var users = {};
 
 var FACEBOOK_APP_ID = "653014024831372";
 var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
@@ -27,6 +31,13 @@ var User = mongoose.model('User', {
   image: String,
   friends: Array,
 });
+
+var Chat = mongoose.model('Message', { 
+  name: String,
+  msg: String,
+  created: {type: Date, default: Date.now}
+});
+
 //database logic
 
 /*add the instance of io here*/
@@ -144,7 +155,7 @@ var app = express();
   app.use(express.static(__dirname + '/app/public'));
   app.use(express.static(__dirname + '/'));
 
-  var http    = require('http');
+  var http    = require('http'); // this is for map and chat
       server  = http.createServer(app);
       io      = require('socket.io')(server);
 

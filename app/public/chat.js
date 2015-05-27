@@ -1,33 +1,3 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var mongoose = require('mongoose');
-var users = {};
-
-http.listen(4000, function(){
-  console.log('Listening on Port 4000');
-});
-
-mongoose.connect('mongodb://localhost/socketChat', function(err){
-  if(err){
-    console.log(err);
-  } else{
-    console.log('Connected to MongoDB'); 
-  }
-});
-
-var chatSchema = mongoose.Schema({ 
-  user: String,
-  msg: String,
-  created: {type: Date, default: Date.now}
-});
-
-var Chat = mongoose.model('Message', chatSchema);
-
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});  
-
 io.on('connection', function(socket){
   var query = Chat.find({}); 
     query.sort('-created').limit(8).exec(function(err, docs){
@@ -50,6 +20,7 @@ io.on('connection', function(socket){
     io.emit('usernames', Object.keys(users));
   };
 
+// private message
   socket.on('send message', function(data, callback){
     var msg = data.trim();
     if(msg.substr(0,3) === '/w '){ //whispers block
