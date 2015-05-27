@@ -30,7 +30,6 @@ var User = mongoose.model('User', {
 var FACEBOOK_APP_ID = "653014024831372";
 var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 
-
 passport.serializeUser(function(user, done) {
  console.log('serializeUser: ' + user.id)
   done(null, user.id);
