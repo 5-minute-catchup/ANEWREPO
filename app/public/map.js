@@ -2,13 +2,15 @@
   "use strict";
   var map;
   var markers = [];
-
   var socket = io.connect('https://fivemincatchup.herokuapp.com');
 
   var getUser = document.getElementById("map-canvas");
 
- 
- 
+  console.log(getUser.dataset.name);
+  console.log(getUser.dataset.friends);
+
+  console.log(getUser);
+
   function initialize() {
     var mapOptions = {
       zoom: 16
@@ -29,19 +31,12 @@
       navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-
         new google.maps.InfoWindow({
           map: map,
           position: pos,
-          title: "user"
+          content: '<IMG BORDER="0" ALIGN="center" SRC=' + getUser.dataset.image + '>' + '<br><center>' + getUser.dataset.name
         });
-
-        google.maps.event.addListener(marker, 'click', function() {
-          infowindow.open(map,marker);
-        });
-
         map.setCenter(pos);
- 
 
         /*emit the marker*/
         socket.emit('marker', {
@@ -82,22 +77,14 @@
       center: location
     };
 
- 
-
-
     var marker = new google.maps.InfoWindow({
       position: location,
       title:"Found User!",
       content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image + '>'
-
-      content: contentString
-
     });
-
  
     /*To add the marker to the map, call setMap();*/
     marker.setMap(map);
- 
   }
  
   function handleNoGeolocation(errorFlag) {

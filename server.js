@@ -62,6 +62,7 @@ passport.use(new FacebookStrategy({
     enableProof: false
   },
   function(accessToken, refreshToken, profile, done) {
+<<<<<<< HEAD
 
 
     var friendObject;
