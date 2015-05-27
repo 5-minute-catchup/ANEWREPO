@@ -11,16 +11,12 @@ var methodOverride = require('method-override');
 var port = process.env.PORT || 3000;
 var markers = [];
 var https = require('https');
-var io = require('socket.io')(http);
-
 
 // database set up
 var mongojs = require("mongojs");
 var mongoose = require('mongoose')
 var uri = 'mongodb://fmcteam:fmc123@ds031802.mongolab.com:31802/fmcuser'
 var db = mongoose.connect(uri)
-
-var users = {};
 
 var FACEBOOK_APP_ID = "653014024831372";
 var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
@@ -31,35 +27,20 @@ var User = mongoose.model('User', {
   image: String,
   friends: Array,
 });
-
-
-
 //database logic
 
-/*add the instance of io here*/
 
 
 passport.serializeUser(function(user, done) {
- console.log('serializeUser: ' + user.id)
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  User.findOne({
-    _id: id
-    }, function(err, user){
-     if(!err) done(null, User);
-     else done(err, null)
- })
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
 });
 
-var sessionData = session({
-  store: sessionStore.createSessionStore(),
-  secret: "your_secret",
-  cookie: { maxAge: 2628000000 },
-  resave: true,
-  saveUninitialized: true
-});
 
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
@@ -97,34 +78,29 @@ passport.use(new FacebookStrategy({
 
     function updateFriends(friends) { 
       User.findOne({facebookID: profile.id}, function(err, user) {
-              // friendsSorter()
-              if(err) {
-                console.log("dont see me")
-                return done(err);
-              }
-              else if (!user) {
-                  user = new User({
-                    facebookID: profile.id,
-                      name: profile.displayName,
-                      provider: 'facebook',
-                      facebook: profile._json,
-                      image: "https://graph.facebook.com/" + profile.id + "/picture?width=80&height=80&access_token=" + accessToken,
-                      friends: friends
-                  });
-
-                  user.save(function(err) {
-                      if (err) console.log(err);
-                      return done(err, user);
-                  });
-              } else {
-                console.log("in else block")
-                  //found user. Return
-                  return done(err, user);
-              }
-
+        if(err) {
+          done(err);
+        }
+        else if (!user) {
+          user = new User({
+            facebookID: profile.id,
+              name: profile.displayName,
+              provider: 'facebook',
+              facebook: profile._json,
+              image: "https://graph.facebook.com/" + profile.id + "/picture?width=200&height=200&access_token=" + accessToken,
+              friends: friends
           });
-    }
 
+          user.save(function(err) {
+              if (err) console.log(err);
+              done(err, user);
+          });
+        } else {
+          done(err, user);
+        }
+
+      });
+    }
   }
 ));
 
@@ -133,25 +109,25 @@ var app = express();
 
   app.set('views', __dirname + '/app/views');
   app.set('view engine', 'ejs');
-  app.use(sessionData);
-  app.use(logger("combined"));
+  // app.use(logger("combined"));
   app.use(cookieParser());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
     extended: true
   }));
   app.use(methodOverride());
-  app.use(session({
+  var sessionObject = session({
       secret: "keyboard cat",
       saveUninitialized: true, // (default: true)
       resave: true, // (default: true)
-    }));
+    });
+  app.use(sessionObject);
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(express.static(__dirname + '/app/public'));
   app.use(express.static(__dirname + '/'));
 
-  var http    = require('http'); // this is for map and chat
+  var http    = require('http');
       server  = http.createServer(app);
       io      = require('socket.io')(server);
 
@@ -191,41 +167,34 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.get('/chat', function(req, res){
-  User.findById(req.session.passport.user, function(err, user) {
-    if(err) {
-      console.log(err);
-    } else {
-     res.render('chat', { user: user});
-    }  
-  });
-});
 
+io.use(function(socket, next) {
+  sessionObject(socket.request, socket.request.res, next);
+});
 
 // Socket markers start
 
-
 io.on('connection', function(socket) {
     console.log('a user connected');
-      socket.on('marker', function(data) {
+
+    socket.on('marker', function(data) {
       data.socketId = socket.id;
       User.findById(socket.request.session.passport.user, function(err, user){
-      if(user){
-        data.user = user;
-        markers[socket.id] = data;
-        console.log(data);
-        io.emit('show-marker', data);
-      }
+        if(user){
+          data.user = user;
+          markers[socket.id] = data;
+          console.log(data);
+          io.emit('show-marker', data);
+        }
+      });
     });
-  });
 
     // socket.on('show-marker', )
     socket.on('show-user-location', function(data) {
-      socket.broadcast.emit('show-user-location', data);
+      io.emit('show-user-location', data);
     });
 
 });
-
 
 server.listen(port, function(){
   console.log('five minute catch up is on port 3000');
@@ -237,16 +206,5 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login')
 }
-
-// chat sockets
-
-io.on('chat', function(socket){
-  console.log('a user connected');
-  socket.on('chat message', function(msg){
-    console.log('message:' + msg);
-     io.emit('chat message', msg);
-  });
-});
-
 
 module.exports = server;
