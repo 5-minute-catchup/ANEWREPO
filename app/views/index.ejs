@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
 <!-- Latest compiled and minified JavaScript -->
+<<<<<<< HEAD
     <script src="//code.jquery.com/jquery-1.11.1.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <!--  custom css    --> 
@@ -24,6 +25,16 @@
       <style type="text/css">
       html, body, #map-canvas { height: 90%; margin: 0; padding: 0;  top: 0px; z-index: 1; position: relative; }
     </style>
+=======
+      <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<!--  custom css    --> 
+      <link rel="stylesheet" href="app/styles/main.css">
+<!--    Internal map style (cant remove)-->
+      <style type="text/css">
+      html, body, #map-canvas { height: 90%; margin: 0; padding: 0;}
+      </style>
+>>>>>>> b30b129914a6734ad554158509ccbbe02392a255
 <!--   Public API  -->
      <script src="//maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script>
   </head>
@@ -90,6 +101,7 @@
         <div id="map-canvas" data-name='<%= user.name %>' data-image=<%= user.image %> data-friends=<%= user.friends %>>
         </div>
 
+        <img src="<%= user.image %>">
       <% } %>
 
     <div class="footer">
