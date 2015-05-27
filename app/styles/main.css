@@ -9,7 +9,7 @@
   border:  0;}
  
 body {
-  background: url("../public/images/street.jpg") no-repeat center center fixed; 
+  background: url("../public/images/wooden_background.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -32,7 +32,8 @@ body {
 h1 {
   padding: 7px;
   font-size: 37px;
-  font-family: 'Pacifico', cursive;
+  font-family: 'Helvetica', cursive;
+  font-style: italic;
   color: #ffffff;
   text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.61);
 }
@@ -40,8 +41,8 @@ h1 {
 h2 {
   padding: 7px;
   font-size: 37px;
-  font-family: 'Pacifico', cursive;
-  color: #c71585
+  font-family: 'Helvetica', cursive;
+  color: #D2B48C;
   z-index: 100;
 }
  
@@ -61,17 +62,15 @@ h4 {
 }
  
 .navbar-brand {
-  font-family: 'Pacifico', cursive;
-  color: #c71585;
+  font-family: 'Helvetica', cursive;
+  font-style: italic;
+  color: #480000;
   font-size: 23px;
   }
-<<<<<<< HEAD
  
 .a:link {
-=======
 
 .nav {
->>>>>>> b30b129914a6734ad554158509ccbbe02392a255
   color: #c71585;
 }
  
@@ -166,3 +165,4 @@ h4 {
     border-bottom: 0;
   }
 }
+
