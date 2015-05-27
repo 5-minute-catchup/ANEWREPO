@@ -19,7 +19,9 @@ var db = mongoose.connect(uri)
 
 var User = mongoose.model('User', {
   name: String,
-  facebookID: String
+  facebookID: String,
+  image: String,
+  friends: String
 });
 //database logic
 
@@ -72,7 +74,9 @@ passport.use(new FacebookStrategy({
                   facebookID: profile.id,
                     name: profile.displayName,
                     provider: 'facebook',
-
+                    facebook: profile._json,
+                    image: "https://graph.facebook.com/" + profile.id + "/picture?width=200&height=200&access_token=" + accessToken,
+                    friends: "https://graph.facebook.com/" + profile.id + "/friends&access_token=" + accessToken
                 });
                 user.save(function(err) {
                     if (err) console.log(err);

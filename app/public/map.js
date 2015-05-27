@@ -28,7 +28,7 @@
         new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: 'You are here'
+          content: profile.id + 'user.name <IMG BORDER="0" ALIGN="Left" SRC="https://graph.facebook.com/10153052143439442/picture"> <br>Phoebe '
         });
         map.setCenter(pos);
  
@@ -70,11 +70,11 @@
       zoom: 6,
       center: location
     };
- 
+
     var marker = new google.maps.InfoWindow({
       position: location,
       title:"Found User!",
-      content: "Username"
+      content: '<IMG BORDER="0" ALIGN="Left" SRC="https://graph.facebook.com/10153138856866280/picture">'
     });
  
     /*To add the marker to the map, call setMap();*/
