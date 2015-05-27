@@ -2,13 +2,12 @@
   "use strict";
   var map;
   var markers = [];
-<<<<<<< HEAD
-  var socket = io.connect('http://fivemincatchup.herokuapp.com');
+// <<<<<<< HEAD
+//   var socket = io.connect('http://fivemincatchup.herokuapp.com');
  
-=======
+// =======
   var socket = io.connect('http://localhost:3000');
 
->>>>>>> b30b129914a6734ad554158509ccbbe02392a255
   console.log('test');
  
   function initialize() {
@@ -30,10 +29,21 @@
       navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
  
-        new google.maps.InfoWindow({
+
+        var infowindow = new google.maps.InfoWindow({
+          content: "<%= user.name %>"
+        });
+
+        var marker = new google.maps.Marker({
           map: map,
           position: pos,
+          title: "user"
         });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map,marker);
+        });
+
         map.setCenter(pos);
  
  
@@ -75,13 +85,8 @@
       zoom: 6,
       center: location
     };
-<<<<<<< HEAD
  
-    var marker = new google.maps.InfoWindow({
-      position: location,
-      title:"Found User!",
-      content: "Username"
-=======
+
 
     
 
@@ -89,7 +94,7 @@
       position: location,
       title:"Found User!",
       content: contentString
->>>>>>> b30b129914a6734ad554158509ccbbe02392a255
+
     });
  
     /*To add the marker to the map, call setMap();*/
