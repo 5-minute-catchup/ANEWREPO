@@ -74,7 +74,7 @@ passport.use(new FacebookStrategy({
                     name: profile.displayName,
                     provider: 'facebook',
                     facebook: profile._json,
-                    image: "https://graph.facebook.com/" + profile.id + "/picture?width=200&height=200&access_token=" + accessToken,
+                    image: "https://graph.facebook.com/" + profile.id + "/picture?width=60&height=60&access_token=" + accessToken,
                     friends: "https://graph.facebook.com/" + profile.id + "/friends&access_token=" + accessToken
                 });
                 user.save(function(err) {

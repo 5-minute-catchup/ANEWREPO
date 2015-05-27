@@ -34,7 +34,7 @@
         new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image + '>'
+          content: '<IMG BORDER="0" ALIGN="center" SRC=' + getUser.dataset.image + '>' + '<br><center>' + getUser.dataset.name
         });
         map.setCenter(pos);
 
