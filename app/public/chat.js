@@ -1,55 +1,35 @@
-io.on('connection', function(socket){
-  var query = Chat.find({}); 
-    query.sort('-created').limit(8).exec(function(err, docs){
-      if(err) throw err;
-      socket.emit('load old msgs', docs);
-  });
-
-  socket.on('new user', function(data, callback) {
-    if (data in users) {
-      callback(false);
-    } else{
-      callback(true);
-      socket.username = data;
-      users[socket.username] = socket;
-      updateUsernames();
-    }
-  });
-
-  function updateUsernames() {
-    io.emit('usernames', Object.keys(users));
-  };
-
-// private message
-  socket.on('send message', function(data, callback){
-    var msg = data.trim();
-    if(msg.substr(0,3) === '/w '){ //whispers block
-      msg = msg.substr(3);
-      var ind = msg.indexOf(' ');
-      if(ind !== -1){
-        var name = msg.substring(0, ind);
-        var msg = msg.substring(ind + 1);
-        if(name in users){
-          users[name].emit('private message', {msg: msg, user: socket.username});
-          console.log('Whisper');
-        } else{
-          callback('Error, enter a valid user');
-        }
-      } else{
-        callback('Error! Please enter whisper message')
-      } 
-    } else{
-        var newMsg = new Chat({msg: msg, user: socket.username});
-        newMsg.save(function(err){
-          if(err) throw err;
-        });
-        io.emit('new message', {msg: msg, user: socket.username}); //actual messages
-      }
-  });
-
-  socket.on('disconnect', function(data) {
-    if(!socket.username) return;
-    delete users[socket.username]
-    updateUsernames();
-  });
-});
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+      <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+      <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script>
+        var socket = io(); // If you wanted to load a new url it would go here
+        $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+      });
+      </script>
+  </body>
+</html>

@@ -32,11 +32,7 @@ var User = mongoose.model('User', {
   friends: Array,
 });
 
-var Chat = mongoose.model('Message', { 
-  name: String,
-  msg: String,
-  created: {type: Date, default: Date.now}
-});
+
 
 //database logic
 
@@ -112,7 +108,7 @@ passport.use(new FacebookStrategy({
                       name: profile.displayName,
                       provider: 'facebook',
                       facebook: profile._json,
-                      image: "https://graph.facebook.com/" + profile.id + "/picture?width=200&height=200&access_token=" + accessToken,
+                      image: "https://graph.facebook.com/" + profile.id + "/picture?width=80&height=80&access_token=" + accessToken,
                       friends: friends
                   });
 
@@ -235,5 +231,16 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login')
 }
+
+// chat sockets
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('chat message', function(msg){
+    console.log('message:' + msg);
+     io.emit('chat message', msg);
+  });
+});
+
 
 module.exports = server;

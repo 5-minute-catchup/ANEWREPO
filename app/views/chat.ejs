@@ -1,110 +1,35 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket Chat App</title>
+    <title>Socket.IO chat</title>
     <style>
-      #chat {
-        height:500px;
-      }
-      #contentWrap {
-        display: none;
-      }
-      #chatWrap {
-        float:left;
-        border: 1px #000 solid;
-      }
-      .error{
-        color: red;
-      }
-      .private{
-        color: gray;
-        font-style: italic;
-      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
     </style>
   </head>
-
-<body>
-
-  <div id="usernameWrap">
-    <p> Enter a username: </p>
-    <p id="usernameError"></p>
-    <form id="setUsername">
-      <input size="35" id="username"></input>
-      <input type="submit"></input>
+  <body>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
     </form>
-  </div>
-
-  <div id="contentWrap">
-    <div id="chatWrap">
-      <div id="chat"></div>
-        <form id="send-message"></ul>
-          <input size="35" id="message"></input>
-          <input type="submit"></input>
-        </form>
-    </div>
-    <div id="users"></div>
-  </div>
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-  <script>
-
-      var socket = io();
-      var $usernameForm = $('#setUsername');
-      var $usernameError = $('#usernameError');
-      var $usernameBox = $('#username');
-      var $users = $('#users');
-      var $messageForm = $('#send-message');
-      var $messageBox = $('#message');
-      var $chat = $('#chat');
-
-      $usernameForm.submit(function(e){
-        e.preventDefault();
-        socket.emit('new user', $usernameBox.val(), function(data){
-          if(data) {
-            $('#usernameWrap').hide();
-            $('#contentWrap').show();
-          } else{
-            $usernameError.html('That username is already taken! Please try again.')
-          }
-        });
-        $usernameBox.val('');
+      <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+      <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script>
+        var socket = io(); // If you wanted to load a new url it would go here
+        $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
       });
-
-      socket.on('usernames', function(data) {
-        var html = '<b>' + 'Online users:' + '</b>' + '<br>';
-        for(var i=0; i < data.length; i++){
-          html += data[i] + '<br/>'
-        }
-        $users.html(html)
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
       });
-
-      $messageForm.submit(function(e){
-        e.preventDefault();
-        socket.emit('send message', $messageBox.val(), function(data) {
-          $chat.append('<span class="error"><b>' + data + "</span><br/>");
-        });
-        $messageBox.val('');
-      });
-
-      function displayMsg(data){
-        $chat.append('<span class="msg"><b>' + data.user + ': </b>' + data.msg + "</span><br/>");
-      }
-
-      socket.on('load old msgs', function(docs) {
-        for(var i=docs.length-1; i >= 0; i--){
-          displayMsg(docs[i]);
-        }
-      });
-
-      socket.on('new message', function(data){
-        displayMsg(data);
-      });
-
-      socket.on('private message', function(data) {
-        $chat.append('<span class="private message"><b>' + data.user + ': </b>' + data.msg + "</span><br/>");
-      });
-  </script>
-</body>
+      </script>
+  </body>
 </html>
