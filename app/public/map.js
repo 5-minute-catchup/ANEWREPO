@@ -34,7 +34,7 @@
         new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: '<IMG BORDER="0" ALIGN="center" SRC=' + getUser.dataset.image + '>' + '<br><center>' + getUser.dataset.name
+          content: '<IMG BORDER="0" ALIGN="center" SRC=' + getUser.dataset.image + '>' + '<br><center>' + getUser.dataset.name + '<a href="/chat">Open Chat</a?'
         });
         map.setCenter(pos);
 

@@ -62,8 +62,6 @@ passport.use(new FacebookStrategy({
     enableProof: false
   },
   function(accessToken, refreshToken, profile, done) {
-<<<<<<< HEAD
-
 
     var friendObject;
     console.log(friendsSorter())
@@ -186,7 +184,15 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-
+app.get('/chat', function(req, res){
+  User.findById(req.session.passport.user, function(err, user) {
+    if(err) {
+      console.log(err);
+    } else {
+     res.render('chat', { user: user});
+    }  
+  });
+});
 
 
 // Socket markers start
