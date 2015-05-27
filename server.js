@@ -17,6 +17,9 @@ var mongoose = require('mongoose')
 var uri = 'mongodb://fmcteam:fmc123@ds031802.mongolab.com:31802/fmcuser'
 var db = mongoose.connect(uri)
 
+var FACEBOOK_APP_ID = "653014024831372";
+var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
+
 var User = mongoose.model('User', {
   name: String,
   facebookID: String,
@@ -26,9 +29,6 @@ var User = mongoose.model('User', {
 //database logic
 
 /*add the instance of io here*/
-
-var FACEBOOK_APP_ID = "653014024831372";
-var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 
 
 passport.serializeUser(function(user, done) {

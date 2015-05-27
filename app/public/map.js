@@ -7,7 +7,7 @@
   var getUser = document.getElementById("map-canvas");
 
   console.log(getUser.dataset.name);
-  console.log(getUser.dataset.image);
+  console.log(getUser.dataset.friends);
 
   console.log(getUser);
 
