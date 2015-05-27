@@ -4,10 +4,10 @@
   var markers = [];
   var socket = io.connect('https://fivemincatchup.herokuapp.com');
 
-  var getUser = document.getAttribute("map-canvas");
+  var getUser = document.getElementById("map-canvas");
 
   console.log(getUser.dataset.name);
-
+  console.log(getUser.dataset.image);
 
   console.log(getUser);
 
@@ -34,7 +34,7 @@
         new google.maps.InfoWindow({
           map: map,
           position: pos,
-          // content:
+          content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image + '>'
         });
         map.setCenter(pos);
 
@@ -80,7 +80,7 @@
     var marker = new google.maps.InfoWindow({
       position: location,
       title:"Found User!",
-      content: '<IMG BORDER="0" ALIGN="Left" SRC="https://graph.facebook.com/10153138856866280/picture">'
+      content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image + '>'
     });
  
     /*To add the marker to the map, call setMap();*/
