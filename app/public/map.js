@@ -90,7 +90,7 @@
     var marker = new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: '<img class="marker-img" src=' + data.user.image + '/>' + '<br><span class="marker-text">' + data.user.name + '</span>'
+          content: '<img class="marker-img" src=' + data.user.image + '/><br><span class="marker-text">' + data.user.name + '<a href="/chat">Open Chat</a>'
       });
     
     marker.setMap(map);
