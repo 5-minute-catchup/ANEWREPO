@@ -4,6 +4,7 @@
   var markers = [];
   // var socket = io.connect('https://fivemincatchup.herokuapp.com');
   var socket = io.connect('http://localhost:3000');
+  
 
   var getUser = document.getElementById("map-canvas");
 
