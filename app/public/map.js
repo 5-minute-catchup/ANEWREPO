@@ -91,7 +91,7 @@
           + '/>' 
           + '<br><span class="marker-text">' 
           + data.user.name  
-          + '<form action="/chat" method="post" id="setUsername'
+          + '<form action="/chat" method="get" id="setUsername'
           + '<a href="javascript:;" onclick="parentNode.submit();"></a>' 
           + '<input type="submit" value="Open Chat"></input>'
           + '</form>'

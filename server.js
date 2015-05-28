@@ -161,6 +161,18 @@ app.get('/login', function(req, res){
 app.get('/auth/facebook',
   passport.authenticate('facebook'));
 
+// app.get('/auth/facebook/callback', function(req, res) {
+//   passport.authenticate('facebook', function(err, user) {
+//     if (!user) {
+//       return res.redirect('/login');
+//     } else {
+
+//       return res.redirect('/?name='+ user.name);
+//       // return res.redirect('/');
+//     }
+//   })(req, res);
+// });
+
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
@@ -175,17 +187,16 @@ app.get('/logout', function(req, res){
 // Chat start
 
 
-app.post('/chat', function(req, res){
+app.get('/chat', function(req, res){
   User.findById(req.session.passport.user, function(err, user) {
     if(err) {
       console.log(err);
     } else {
-     res.render('chat', { user: user});
+     res.render('chat', { user: user });
     }  
   });
 });
 /////
-
 
 io.use(function(socket, next) {
   sessionObject(socket.request, socket.request.res, next);
@@ -238,11 +249,13 @@ io.on('connection', function(socket){
   
   socket.on('send message', function(msg){
     console.log('message:' + msg);
-      var newMsg = new Chat({msg: msg, name: socket.username});
+     User.findById(socket.request.session.passport.user, function(err, user){
+      var newMsg = new Chat({msg: msg, name: user.name});
       newMsg.save(function(err){
         if(err) throw err;
       });
-     io.emit('send message', {msg: msg, name: socket.username});
+     io.emit('send message', {msg: msg, name: user.name});
+   });
   });
 
 });

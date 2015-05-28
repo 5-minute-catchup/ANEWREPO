@@ -27,6 +27,10 @@
 
         $('form').submit(function(e){
           e.preventDefault();
+          // var chatMsg = {
+          //   msg: $messageBox.val(),
+          //   user: <% user %>
+          // }
           socket.emit('send message', $messageBox.val(), function(data) {
             $('#messages').append('<span class="error"><b>' + data + "</span><br/>");
           });
