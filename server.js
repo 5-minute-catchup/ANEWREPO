@@ -17,6 +17,7 @@ var mongojs = require("mongojs");
 var mongoose = require('mongoose')
 var uri = 'mongodb://fmcteam:fmc123@ds031802.mongolab.com:31802/fmcuser'
 var db = mongoose.connect(uri)
+var chatUsers = {};
 
 var FACEBOOK_APP_ID = "653014024831372";
 var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
@@ -26,6 +27,12 @@ var User = mongoose.model('User', {
   facebookID: String,
   image: String,
   friends: Array,
+});
+
+var Chat = mongoose.model('Chat', {
+  name: String,
+  msg: String,
+  created: {type: Date, default: Date.now}
 });
 //database logic
 
@@ -40,7 +47,6 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
-
 
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
@@ -169,7 +175,7 @@ app.get('/logout', function(req, res){
 // Chat start
 
 
-app.get('/chat', function(req, res){
+app.post('/chat', function(req, res){
   User.findById(req.session.passport.user, function(err, user) {
     if(err) {
       console.log(err);
@@ -214,10 +220,31 @@ io.on('connection', function(socket) {
 
 io.on('connection', function(socket){
   console.log('a user connected');
-  socket.on('chat message', function(msg){
+
+  // socket.on('user connected', function(data, callback) {
+  //   if (data in users) {
+  //     callback(false);
+  //   } else{
+  //     callback(true);
+  //     socket.username = data;
+  //     users[socket.username] = socket;
+  //     updateUsernames();
+  //   }
+  // });
+
+  // function updateUsernames() {
+  //   io.emit('usernames', Object.keys(users));
+  // }
+  
+  socket.on('send message', function(msg){
     console.log('message:' + msg);
-     io.emit('chat message', msg);
+      var newMsg = new Chat({msg: msg, name: socket.username});
+      newMsg.save(function(err){
+        if(err) throw err;
+      });
+     io.emit('send message', {msg: msg, name: socket.username});
   });
+
 });
 /////
 

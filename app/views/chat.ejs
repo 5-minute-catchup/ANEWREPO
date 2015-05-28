@@ -25,14 +25,22 @@
         var $messageBox = $('#messageBox');
 
 
-        $('form').submit(function(){
-        socket.emit('chat message', $messageBox.val());
-        $messageBox.val('');
-        return false;
-      });
-      socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text("<%= user.name %>: " + msg));
-      });
+        $('form').submit(function(e){
+          e.preventDefault();
+          socket.emit('send message', $messageBox.val(), function(data) {
+            $('#messages').append('<span class="error"><b>' + data + "</span><br/>");
+          });
+          $messageBox.val('');
+        });
+
+        function displayMsg(data){
+          $('#messages').append('<span class="msg"><b>' + data.name + ': </b>' + data.msg + "</span><br/>");
+        }
+
+        socket.on('send message', function(data){
+          displayMsg(data);
+        });
+
       </script>
   </body>
 </html>
