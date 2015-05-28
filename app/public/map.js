@@ -69,11 +69,16 @@
       center: location
     };
 
-    var marker = new google.maps.InfoWindow({
-      position: location,
+    var marker = new google.maps.Marker({
+          position: location,
       title:"Found User!",
       content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image 
       // + '<a href="/chat">Open Chat</a>'
+    });
+
+
+    google.maps.event.addListener(marker, 'click', function() {
+      infoWindow.open(map,marker);
     });
  
     /*To add the marker to the map, call setMap();*/
@@ -83,12 +88,19 @@
   function add_best_marker(data){
     console.log("on progress");
     var pos = new google.maps.LatLng(data.lat, data.lng);  
-    var marker = new google.maps.InfoWindow({
+    var marker = new google.maps.Marker({
           map: map,
           position: pos,
+    })
+
+    var infoWindow = new google.maps.InfoWindow({
           content: '<img class="marker-img" src=' + data.user.image + '/>' + '<br><span class="marker-text">' + data.user.name  + '<a href="/chat">Open Chat</a>' + '</span>'
       });
     
+    google.maps.event.addListener(marker, 'click', function() {
+    infoWindow.open(map,marker);
+  });
+
     marker.setMap(map);
     
   }

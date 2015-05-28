@@ -214,12 +214,15 @@ io.on('connection', function(socket) {
 
 io.on('connection', function(socket){
   console.log('a user connected');
-  socket.on('chat message', function(msg){
+
+  socket.on('chat message', function(msg, data){
+    data.socketId = socket.id;
     console.log('message:' + msg);
      io.emit('chat message', msg);
   });
 });
 /////
+
 
 server.listen(port, function(){
   console.log('five minute catch up is on port 3000');
