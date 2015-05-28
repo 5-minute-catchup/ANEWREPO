@@ -31,6 +31,7 @@ var User = mongoose.model('User', {
 
 var connected_users_data = [];
 
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -207,6 +208,14 @@ io.on('connection', function(socket) {
     socket.on('show-user-location', function(data) {
       io.emit('show-user-location', data);
     });
+
+  
+  socket.on('disconnect', function(){
+    markers = markers.filter(function(obj){
+    return obj.socketId !== socket.id
+  });
+  });      
+
 
 });
 

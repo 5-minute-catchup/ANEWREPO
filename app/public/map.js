@@ -28,10 +28,7 @@
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
 //        new google.maps.InfoWindow({
-//          map: map,
-//          position: pos,
-//          content: '<IMG BORDER="0" ALIGN="center" SRC=' + getUser.dataset.image + '>' + '<br><center>' + getUser.dataset.name
-//        });
+//      
         map.setCenter(pos);
         /*emit the marker*/
         socket.emit('marker', {

@@ -1,7 +1,10 @@
-/*this is the marker*/
-.gm-style-iw {
-   background-color: #fff;
-   border-radius: 2px 2px 0 0;
+.marker-img {
+  width: 100px;
+  height: auto;
+}
+.marker-text{
+  color: #000000;
+  font-size: 14px;
 }
  
 .header {padding-bottom:0px;
