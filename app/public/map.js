@@ -51,16 +51,9 @@
   socket.on('show-marker', function(data) {
     
     console.log(data);
-    add_best_marker(data)
-    var position = new google.maps.LatLng(data.lat, data.lng);
-    //add_new_marker(position, data.socketId);
- 
-    navigator.geolocation.getCurrentPosition(function(position) {
-      socket.emit('show-user-location', {
-        lat: position.coords.latitude,
-        lon: position.coords.longitude,
-        user: data.user
-      });
+    data.forEach(function(the_marker){
+      add_best_marker(the_marker)
+      console.log(the_marker.user.name + " created.");
     });
   });
  
@@ -72,14 +65,15 @@
  
   function add_new_marker(location, text) {
     var mapOptions = {
-      zoom: 6,
+      zoom: 16,
       center: location
     };
 
     var marker = new google.maps.InfoWindow({
       position: location,
       title:"Found User!",
-      content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image + '<a href="/chat">Open Chat</a>'
+      content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image 
+      // + '<a href="/chat">Open Chat</a>'
     });
  
     /*To add the marker to the map, call setMap();*/
