@@ -72,7 +72,7 @@
     var marker = new google.maps.Marker({
           position: location,
       title:"Found User!",
-      content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image 
+      content: '<IMG BORDER="0" ALIGN="Left" SRC= + getUser.dataset.image + >'
       // + '<a href="/chat">Open Chat</a>'
     });
 
@@ -86,24 +86,17 @@
   }
  
   function add_best_marker(data){
-    console.log("on progress");
     var pos = new google.maps.LatLng(data.lat, data.lng);  
-    var marker = new google.maps.Marker({
+    var marker = new google.maps.InfoWindow({
           map: map,
           position: pos,
-    })
-
-    var infoWindow = new google.maps.InfoWindow({
-          content: '<img class="marker-img" src=' + data.user.image + '/>' + '<br><span class="marker-text">' + data.user.name  + '<a href="/chat">Open Chat</a>' + '</span>'
+          content: '<img class="marker-img" src=' + data.user.image + '/>' + '<br><span class="marker-text">' + data.user.name + '</span>'
       });
     
-    google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.open(map,marker);
-  });
-
     marker.setMap(map);
     
   }
+  
   
   function handleNoGeolocation(errorFlag) {
     var content = 'Found user';

@@ -60,6 +60,11 @@ h4 {
   border-radius: 10px;
   padding: 20px;
 }
+
+.settings {
+   background: rgba(255, 255, 255, 0.7);
+
+}
  
 .navbar-brand {
   font-family: 'Pacifico', cursive;
