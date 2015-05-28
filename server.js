@@ -10,6 +10,7 @@ var cookieParser = require("cookie-parser")
 var methodOverride = require('method-override');
 var port = process.env.PORT || 3000;
 var markers = [];
+var infowindows = [];
 var https = require('https');
 
 // database set up
@@ -214,6 +215,7 @@ io.on('connection', function(socket) {
           data.socketId = socket.id;
           data.user = user;
           markers.push(data);
+          infowindows.push(data)
           console.log(markers);
           // markers[socket.id] = data;
           
@@ -229,6 +231,9 @@ io.on('connection', function(socket) {
   
   socket.on('disconnect', function(){
     markers = markers.filter(function(obj){
+    return obj.socketId !== socket.id
+  });
+    infowWindows= infowindows.filter(function(obj){
     return obj.socketId !== socket.id
   });
   });      

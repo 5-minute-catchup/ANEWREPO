@@ -83,9 +83,12 @@
  
   function add_best_marker(data){
     var pos = new google.maps.LatLng(data.lat, data.lng);  
-    var marker = new google.maps.InfoWindow({
+    var marker = new google.maps.Marker({
           map: map,
           position: pos,
+    })
+
+    var infoWindow = new google.maps.InfoWindow({
           content: '<img class="marker-img" src=' 
           + data.user.image 
           + '/>' 
