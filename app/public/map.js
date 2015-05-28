@@ -94,12 +94,23 @@
     })
 
     var infoWindow = new google.maps.InfoWindow({
-          content: '<img class="marker-img" src=' + data.user.image + '/>' + '<br><span class="marker-text">' + data.user.name  + '<a href="/chat">Open Chat</a>' + '</span>'
+
+          content: '<img class="marker-img" src=' 
+          + data.user.image 
+          + '/>' 
+          + '<br><span class="marker-text">' 
+          + data.user.name  
+          + '<form action="/chat" method="get" id="setUsername'
+          + '<a href="javascript:;" onclick="parentNode.submit();"></a>' 
+          + '<input type="submit" value="Open Chat"></input>'
+          + '</form>'
+          + '</span>'
+
       });
     
     google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.open(map,marker);
-  });
+      infoWindow.open(map,marker);
+    });
 
     marker.setMap(map);
     
