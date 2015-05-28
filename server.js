@@ -29,7 +29,7 @@ var User = mongoose.model('User', {
 });
 //database logic
 
-
+var connected_users_data = [];
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -166,7 +166,8 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-/// CHAT
+// Chat start
+
 
 app.get('/chat', function(req, res){
   User.findById(req.session.passport.user, function(err, user) {
@@ -187,20 +188,21 @@ io.use(function(socket, next) {
 // Socket markers start
 
 io.on('connection', function(socket) {
-    console.log('a user connected');
 
     socket.on('marker', function(data) {
       data.socketId = socket.id;
       User.findById(socket.request.session.passport.user, function(err, user){
         if(user){
+          data.socketId = socket.id;
           data.user = user;
-          markers[socket.id] = data;
-          console.log(data);
-          io.emit('show-marker', data);
+          markers.push(data);
+          console.log(markers);
+          // markers[socket.id] = data;
+          
+          io.emit('show-marker', markers);
         }
       });
     });
-
     // socket.on('show-marker', )
     socket.on('show-user-location', function(data) {
       io.emit('show-user-location', data);
