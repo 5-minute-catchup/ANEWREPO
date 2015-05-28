@@ -34,7 +34,7 @@
         });
 
         function displayMsg(data){
-          $('#messages').append('<span class="msg"><b>' + data.name + ': </b>' + data.msg + "</span><br/>");
+          $('#messages').append('<span class="msg"><b>' + "Caron: </b>" + data.msg + "</span><br/>");
         }
 
         socket.on('send message', function(data){

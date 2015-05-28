@@ -17,7 +17,7 @@ body {
 }
  
 .navbar-custom {
- background: rgba(255, 255, 255, 0.6);
+ background: rgba(255, 255, 255, 0.7);
  border-radius: 0px;
  position: relative;
  z-index: 200;
@@ -39,9 +39,10 @@ h1 {
  
 h2 {
   padding: 7px;
-  font-size: 37px;
+  font-size: 30px;
   font-family: 'Pacifico', cursive;
-  color: #c71585
+  color: #1f65ce;
+  text-shadow: -6px -2px 7px rgba(150, 150, 109, 1);
   z-index: 100;
 }
  
@@ -65,29 +66,25 @@ h4 {
   color: #c71585;
   font-size: 23px;
   }
-<<<<<<< HEAD
- 
-.a:link {
-=======
 
-.nav {
->>>>>>> b30b129914a6734ad554158509ccbbe02392a255
+
+/*.nav {
   color: #c71585;
-}
+}*/
  
 #float {
   position: absolute;
   z-index: 900;
 }
  
-/*#map-canvas { 
+#map-canvas { 
   height: 100%; 
   margin: 0; 
   padding: 0;
   z-index: 1;
   position: fixed;
   top: 0px;
-}*/
+}
  
 .browsehappy {
   margin: 0.2em 0;

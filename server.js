@@ -175,7 +175,7 @@ app.get('/logout', function(req, res){
 // Chat start
 
 
-app.post('/chat', function(req, res){
+app.get('/chat', function(req, res){
   User.findById(req.session.passport.user, function(err, user) {
     if(err) {
       console.log(err);
@@ -247,6 +247,7 @@ io.on('connection', function(socket){
 
 });
 /////
+
 
 server.listen(port, function(){
   console.log('five minute catch up is on port 3000');
