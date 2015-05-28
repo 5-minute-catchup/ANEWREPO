@@ -92,7 +92,7 @@
           + '<br><span class="marker-text">' 
           + data.user.name  
           + '<br>'
-          + "<a href=\"//fivemincatchup.herokuapp.com\" onclick=\"javascript:void window.open('http://localhost:3000/chat','1432823285028','width=700,height=500,toolbar=0,menubar=0,location=1,status=1,scrollbars=0,resizable=1,left=0,top=0');return false;\">Chat</a>"
+          + "<a href=\"//fivemincatchup.herokuapp.com\" onclick=\"javascript:void window.open('//fivemincatchup.herokuapp.com','1432823285028','width=700,height=500,toolbar=0,menubar=0,location=1,status=1,scrollbars=0,resizable=1,left=0,top=0');return false;\">Chat</a>"
       });
     
     google.maps.event.addListener(marker, 'click', function() {
