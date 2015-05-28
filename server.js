@@ -158,7 +158,6 @@ app.get('/auth/facebook',
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
-
     res.redirect('/');
   });
 
@@ -169,6 +168,7 @@ app.get('/logout', function(req, res){
 
 // Chat start
 
+
 app.get('/chat', function(req, res){
   User.findById(req.session.passport.user, function(err, user) {
     if(err) {
@@ -178,6 +178,7 @@ app.get('/chat', function(req, res){
     }  
   });
 });
+/////
 
 
 io.use(function(socket, next) {
@@ -209,6 +210,8 @@ io.on('connection', function(socket) {
 
 });
 
+///CHAT
+
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('chat message', function(msg){
@@ -216,12 +219,11 @@ io.on('connection', function(socket){
      io.emit('chat message', msg);
   });
 });
+/////
 
 server.listen(port, function(){
   console.log('five minute catch up is on port 3000');
 });
-
-
 
 // socket markers end
 
