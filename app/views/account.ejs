@@ -1,3 +1,118 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+     <head>
+<!--   Logo font -->
+  <link href='//fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <title>Five Minute Catchup - Settings</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
 
-<p>ID: <%= user.facebookID %></p>
-<p>Name: <%= user.name %></p>
+<!-- Latest compiled BOOTSTRAP and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+<!-- BOOTSTRAP Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+
+    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<!--  custom css    --> 
+    <link rel="stylesheet" href="app/styles/main.css">
+
+<!--    Internal map style (cant remove)-->
+      <style type="text/css">
+      html, body, #map-canvas { height: 90%; margin: 0; padding: 0;  top: 0px; z-index: 1; position: relative; }
+    </style>
+
+      <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<!--  custom css    --> 
+    <link rel="stylesheet" href="app/styles/main.css">
+    <link rel="text/javascript" href="app/assets/js/slider-default.css">
+    <script>
+      function outputUpdate(dis) {
+        document.querySelector('#dist').value = dis;
+      }
+    </script>
+
+
+  </head>
+
+  <body>
+
+
+
+        <div class="header">
+        <div class="navbar navbar-custom" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <div class="navbar-brand">Five Minute Catchup</div>
+            </div>
+
+            <div class="collapse navbar-collapse" id="js-navbar-collapse">
+
+              <ul class="nav navbar-nav">
+                <li><a href="/">Map</a></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+         <!-- Navigation End --> -->
+  
+
+        <!-- Page content  -->
+
+ <div class="settings" id="wrap">
+  <b>Account Settings</b><br><br>
+
+<!--     <p>ID: <%= user.facebookID %></p> -->
+    <p>Name: <%= user.name %></p>
+    <p>Friends: <br>
+   You have 3 friends using this app</p>
+    <div data-role="page">
+        <div data-role="main" class="ui-content">
+          <form method="post" style="width:60%" action="to_be_defined">
+          <br>
+            <label for=distance>Set distance:</label>
+            <input type=range min=10 max=100 value=50 id=distance step=1 oninput="outputUpdate(value)">
+            <output for=distance id=dist>50</output><br><br>
+            <B>Incognito Mode</B><br><br>
+            <div class="switch">
+              <input type="checkbox"><label><i></i></label>
+            </div>
+          <input type="submit" data-inline="true" onclick="save()" value="Save settings">
+        </form>
+      </div>
+    </div>
+    <br><br>
+    <div class="container">
+      <p><span class="glyphicon glyphicon-heart"></span>from the Five Minute Catchup team</p>
+    </div>
+
+
+</div>
+
+
+    <!-- footer -->
+    <div class="footer" >
+      <div class="container">
+        <p><span class="glyphicon glyphicon-heart"></span> from the Five Minute Catchup team</p>
+      </div>
+    </div>
+
+  </body>
+</html>

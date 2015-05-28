@@ -38,6 +38,7 @@ var Chat = mongoose.model('Chat', {
 
 var connected_users_data = [];
 
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -93,7 +94,7 @@ passport.use(new FacebookStrategy({
               name: profile.displayName,
               provider: 'facebook',
               facebook: profile._json,
-              image: "https://graph.facebook.com/" + profile.id + "/picture?width=200&height=200&access_token=" + accessToken,
+              image: "https://graph.facebook.com/" + profile.id + "/picture?width=80&height=80&access_token=" + accessToken,
               friends: friends
           });
 
@@ -161,6 +162,18 @@ app.get('/login', function(req, res){
 app.get('/auth/facebook',
   passport.authenticate('facebook'));
 
+// app.get('/auth/facebook/callback', function(req, res) {
+//   passport.authenticate('facebook', function(err, user) {
+//     if (!user) {
+//       return res.redirect('/login');
+//     } else {
+
+//       return res.redirect('/?name='+ user.name);
+//       // return res.redirect('/');
+//     }
+//   })(req, res);
+// });
+
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
@@ -180,12 +193,11 @@ app.get('/chat', function(req, res){
     if(err) {
       console.log(err);
     } else {
-     res.render('chat', { user: user});
+     res.render('chat', { user: user });
     }  
   });
 });
 /////
-
 
 io.use(function(socket, next) {
   sessionObject(socket.request, socket.request.res, next);
@@ -214,6 +226,14 @@ io.on('connection', function(socket) {
       io.emit('show-user-location', data);
     });
 
+  
+  socket.on('disconnect', function(){
+    markers = markers.filter(function(obj){
+    return obj.socketId !== socket.id
+  });
+  });      
+
+
 });
 
 ///CHAT
@@ -238,11 +258,13 @@ io.on('connection', function(socket){
   
   socket.on('send message', function(msg){
     console.log('message:' + msg);
-      var newMsg = new Chat({msg: msg, name: socket.username});
+     User.findById(socket.request.session.passport.user, function(err, user){
+      var newMsg = new Chat({msg: msg, name: user.name});
       newMsg.save(function(err){
         if(err) throw err;
       });
-     io.emit('send message', {msg: msg, name: socket.username});
+     io.emit('send message', {msg: msg, name: user.name});
+   });
   });
 
 });

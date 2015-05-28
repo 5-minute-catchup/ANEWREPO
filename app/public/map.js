@@ -3,7 +3,7 @@
   var map;
   var markers = [];
   // var socket = io.connect('https://fivemincatchup.herokuapp.com');
-  var socket = io.connect('http://fivemincatchup.herokuapp.com');
+  var socket = io.connect('http://localhost:3000');
 
   var getUser = document.getElementById("map-canvas");
 
@@ -28,10 +28,7 @@
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
 //        new google.maps.InfoWindow({
-//          map: map,
-//          position: pos,
-//          content: '<IMG BORDER="0" ALIGN="center" SRC=' + getUser.dataset.image + '>' + '<br><center>' + getUser.dataset.name
-//        });
+//      
         map.setCenter(pos);
         /*emit the marker*/
         socket.emit('marker', {
@@ -72,7 +69,7 @@
     var marker = new google.maps.Marker({
           position: location,
       title:"Found User!",
-      content: '<IMG BORDER="0" ALIGN="Left" SRC=' + getUser.dataset.image 
+      content: '<IMG BORDER="0" ALIGN="Left" SRC= + getUser.dataset.image + >'
       // + '<a href="/chat">Open Chat</a>'
     });
 
@@ -86,9 +83,8 @@
   }
  
   function add_best_marker(data){
-    console.log("on progress");
     var pos = new google.maps.LatLng(data.lat, data.lng);  
-    var marker = new google.maps.Marker({
+    var marker = new google.maps.InfoWindow({
           map: map,
           position: pos,
           content: '<img class="marker-img" src=' 
@@ -96,22 +92,18 @@
           + '/>' 
           + '<br><span class="marker-text">' 
           + data.user.name  
-          + '<a href="/chat">Open Chat</a>' 
-          + '</span>'
-
-    })
-
-    var infoWindow = new google.maps.InfoWindow({
-          content: '<img class="marker-img" src=' + data.user.image + '/>' + '<br><span class="marker-text">' + data.user.name  + '<a href="/chat">Open Chat</a>' + '</span>'
+          + '<br>'
+          + "<a href=\"http://localhost:3000/chat\" onclick=\"javascript:void window.open('http://localhost:3000/chat','1432823285028','width=700,height=500,toolbar=0,menubar=0,location=1,status=1,scrollbars=0,resizable=1,left=0,top=0');return false;\">Chat</a>"
       });
     
     google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.open(map,marker);
-  });
+      infoWindow.open(map,marker);
+    });
 
     marker.setMap(map);
     
   }
+  
   
   function handleNoGeolocation(errorFlag) {
     var content = 'Found user';
