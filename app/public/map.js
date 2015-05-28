@@ -1,7 +1,8 @@
 (function() {
   "use strict";
   var map;
-  var markers = [];
+  var markers = {};
+  var connects = {};
   // var socket = io.connect('https://fivemincatchup.herokuapp.com');
   var socket = io.connect('http://localhost:3000');
 
@@ -52,8 +53,11 @@
     
     console.log(data);
     data.forEach(function(the_marker){
-      add_best_marker(the_marker)
-      console.log(the_marker.user.name + " created.");
+      if (!(data.id in connects)) {
+        connects[data.id] = data;
+        add_best_marker(the_marker);
+        console.log(the_marker.user.name + " created.");
+      };
     });
   });
  
@@ -88,17 +92,17 @@
   function add_best_marker(data){
     console.log("on progress");
     var pos = new google.maps.LatLng(data.lat, data.lng);  
-    var marker = new google.maps.Marker({
+    var marker = new google.maps.InfoWindow({
           map: map,
           position: pos,
-          content: '<img class="marker-img" src=' 
+          maxWidth: 70,
+          content: '<img class="marker-img" width="70" height="70" src=' 
           + data.user.image 
           + '/>' 
           + '<br><span class="marker-text">' 
           + data.user.name  
-          + '<a href="/chat">Open Chat</a>' 
+          + '<br><a href="/chat">Open Chat</a>' 
           + '</span>'
-
     })
 
     var infoWindow = new google.maps.InfoWindow({
