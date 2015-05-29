@@ -260,11 +260,11 @@ io.on('connection', function(socket){
   //   io.emit('usernames', Object.keys(users));
   // }
   
-  var query = Chat.find({}); 
-    query.sort('-created').limit(0).exec(function(err, docs){
-      if(err) throw err;
-      socket.emit('load old msgs', docs);
-  });
+  // var query = Chat.find({}); 
+  //   query.sort('-created').limit(5).exec(function(err, docs){
+  //     if(err) throw err;
+  //     socket.emit('load old msgs', docs);
+  // });
 
   socket.on('send message', function(msg){
     console.log('message:' + msg);
