@@ -106,7 +106,6 @@ passport.use(new FacebookStrategy({
         } else {
           done(err, user);
         }
-
       });
     }
   }
