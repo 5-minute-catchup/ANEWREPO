@@ -282,7 +282,7 @@ io.on('connection', function(socket){
 
 
 server.listen(port, function(){
-  console.log('five minute catch up is on port 3000');
+  console.log('five minute catch up is on port ' + port);
 });
 
 // socket markers end
