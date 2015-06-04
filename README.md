@@ -28,3 +28,5 @@ A geolocation based social website that let's you talk to your facebook friends 
 - Seperate private and global chat
 - Make it clearer how to use website
 - create app, sort out ui issues on phone
+- use the stored fb friends list in mongodb to only display fb friends
+- use the mongodb geolocation services to calculate distances between users to only show nearby friends
